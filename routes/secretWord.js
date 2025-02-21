@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-console.log('12344')
-
 router.get("/", (req, res) => {
   if (!req.session.secretWord) {
     req.session.secretWord = "syzygy";
