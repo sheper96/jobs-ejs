@@ -2,8 +2,6 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 
-
-
 const {
   logonShow,
   registerShow,
@@ -17,10 +15,11 @@ router
   .get(logonShow)
   .post(
     passport.authenticate("local", {
-      successRedirect: "/",
+      successRedirect: "/jobs",
       failureRedirect: "/sessions/logon",
       failureFlash: true,
     })
+    
   );
 router.route("/logoff").post(logoff);
 
