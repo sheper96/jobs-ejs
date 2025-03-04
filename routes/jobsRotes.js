@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
     console.log(req.user)
     try {
         const jobs = await Job.find();
-        res.render('jobs', { jobs });
+        res.render('jobs', { jobs: jobs || [] });
     } catch (err) {
         res.status(500).send('server error');
     }

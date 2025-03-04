@@ -4,5 +4,6 @@ const dbHost = process.env.DB_HOST;
 const dbName = process.env.DB_NAME;
 
 const dbURI = `mongodb+srv://${dbUser}:${dbPassword}@${dbHost}/${dbName}`;
+const dbURITest = `mongodb+srv://${dbUser}:${dbPassword}@${dbHost}/${dbName}-test`;
 
 module.exports = dbURI;
