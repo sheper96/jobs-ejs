@@ -3,6 +3,7 @@ require('express-async-errors');
 const express = require('express');
 const app = express();
 const dbURI = require('./config')
+const dbURITest = require('./config')
 const connectDB = require('./db/connect');
 const storeLocals = require("./middleware/storeLocals");
 const seesionRoutes = require("./routes/sessionRoutes");
@@ -97,10 +98,28 @@ app.use((req, res, next) => {
 
 console.log(typeof secretWordRouter);
 const auth = require("./middleware/auth");
+
+app.use((req, res, next) => {
+  if (req.path == "/multiply") {
+    res.set("Content-Type", "application/json");
+  } else {
+    res.set("Content-Type", "text/html");
+  }
+  next();
+});
+
 app.use("/secretWord", auth, secretWordRouter);
 app.use("/jobs", jobsRouter);
 
-
+app.get("/multiply", (req, res) => {
+  const result = req.query.first * req.query.second;
+  if (result.isNaN) {
+    result = "NaN";
+  } else if (result == null) {
+    result = "null";
+  }
+  res.json({ result: result });
+});
 
 
 app.use((req, res) => {
@@ -114,9 +133,14 @@ app.use((req, res) => {
 
 const port = process.env.PORT || 3000;
 
+let mongoURL = dbURI;
+if (process.env.NODE_ENV == "test") {
+  mongoURL = dbURITest;
+}
+
 const start = async () => {
   try {
-    await connectDB(dbURI);
+    await connectDB(mongoURL);
     app.listen(port, () => console.log(`Server is listening port ${port}...`));
   } catch (error) {
     console.log(error);
